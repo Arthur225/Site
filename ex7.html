@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo da memoria</title>
+    <style>
+        div {
+            margin: 15px;
+            width: 200px;
+            height: 200px;
+            display: inline-block;
+        }
+
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        li {
+            display: inline;
+        }
+
+        .dupla1 {
+            background-color: blue;
+        }
+
+        .dupla2 {
+            background-color: crimson;
+        }
+
+        .dupla3 {
+            background-color: forestgreen;
+        }
+
+        .dupla4 {
+            background-color: gold;
+        }
+
+        .dupla5 {
+            background-color: orange;
+        }
+
+        .dupla6 {
+            background-color: black;
+        }
+
+        .naovirado {
+            background-color: gray;
+        }
+
+        .cartadesapareceu {
+            background-color: transparent;
+        }
+    </style>
+</head>
+
+<body>
+
+    <center>
+        <ul>
+            <li>
+                <div id='botao1' class="dupla1"></div>
+            </li>
+            <li>
+                <div id='botao2' class="dupla1"></div>
+            </li>
+            <li>
+                <div id='botao3' class="dupla2"></div>
+            </li>
+            <li>
+                <div id='botao4' class="dupla2"></div>
+            </li>
+            <li>
+                <div id='botao5' class="dupla3"></div>
+            </li>
+            <li>
+                <div id='botao6' class="dupla3"></div>
+            </li>
+            <li>
+                <div id='botao7' class="dupla4"></div>
+            </li>
+            <li>
+                <div id='botao8' class="dupla4"></div>
+            </li>
+            <li>
+                <div id='botao9' class="dupla5"></div>
+            </li>
+            <li>
+                <div id='botao10' class="dupla5"></div>
+            </li>
+            <li>
+                <div id='botao11' class="dupla6"></div>
+            </li>
+            <li>
+                <div id='botao12' class="dupla6"></div>
+            </li>
+        </ul>
+        <br />
+        <h1 id="pontos">Pontuação:</h1>
+    </center>
+
+</body>
+<script>
+    var clique = true;
+    var pontuacao = 0;
+    var idprimeiro;
+    var umoudois = 0;
+    const divs = document.getElementsByTagName("div");
+    for (div of divs) {
+        div.classList.add("naovirado");
+        div.setAttribute("onclick", "viracarta(this.id)");
+    }
+    var ul = document.querySelector('ul');
+    for (var i = ul.children.length; i >= 0; i--) {
+        ul.appendChild(ul.children[Math.random() * i | 0]);
+    }
+
+    function viracarta(botaoclicado) {
+        if (clique) {
+            if (umoudois == 0) {
+                document.getElementById(botaoclicado).classList.remove('naovirado');
+                umoudois += 1;
+                idprimeiro = botaoclicado;
+                document.getElementById(idprimeiro).setAttribute("onclick", "");
+            } else if (umoudois == 1) {
+                document.getElementById(botaoclicado).classList.remove('naovirado');
+                clique = false;
+                setTimeout(function () {
+                    if (document.getElementById(idprimeiro).className == document.getElementById(botaoclicado)
+                        .className) {
+                        document.getElementById(idprimeiro).classList.add('cartadesapareceu');
+                        document.getElementById(idprimeiro).setAttribute("onclick", "");
+                        document.getElementById(botaoclicado).classList.add('cartadesapareceu');
+                        document.getElementById(botaoclicado).setAttribute("onclick", "");
+                        umoudois = 0;
+                        pontuacao += 1;
+                        document.getElementById("pontos").innerHTML = "Pontuação: " + pontuacao;
+                        if (pontuacao == 6) {
+                            setTimeout(function () {
+                                window.alert("Parabéns, você é muito inteligente!(ironia)")
+                            }, 10);
+                        }
+                    } else {
+                        document.getElementById(idprimeiro).classList.add('naovirado');
+                        document.getElementById(idprimeiro).setAttribute("onclick", "viracarta(this.id)");
+                        document.getElementById(botaoclicado).classList.add('naovirado');
+                        umoudois = 0;
+                    }
+                    clique = true;
+                }, 1000);
+            }
+        }
+    }
+</script>
+
+</html>
